@@ -140,8 +140,8 @@ Check In / Check Out actions
 🎯 Purpose
 
 Enables employees to mark attendance and track working hours transparently.
-7️⃣ My Leaves Page (Employee)
-📄 Description
+<img width="1902" height="944" alt="Screenshot 2026-01-03 181131" src="https://github.com/user-attachments/assets/528227aa-2e04-4deb-8456-a79b3a9af8eb" />
+ My Leaves Page
 
 This page allows employees to view the status of their personal leave requests.
 
@@ -160,7 +160,6 @@ Apply Leave button
 🎯 Purpose
 
 Provides transparency and tracking for employee leave requests.
-<img width="1902" height="944" alt="Screenshot 2026-01-03 181131" src="https://github.com/user-attachments/assets/528227aa-2e04-4deb-8456-a79b3a9af8eb" />
 <img width="1909" height="928" alt="Screenshot 2026-01-03 181150" src="https://github.com/user-attachments/assets/fb93273a-a13c-4152-8876-8a970b174419" />
 8️⃣ Apply Leave Modal
 📄 Description
@@ -183,30 +182,3 @@ Validation for required fields
 
 Simplifies the leave application process with a clean UI.
 
-
-9️⃣ Sidebar Navigation (Common)
-📄 Description
-
-A persistent sidebar used across the application for easy navigation.
-
-✨ Features
-
-Dashboard
-
-Employees
-
-Attendance
-
-Leaves
-
-Payroll
-
-User profile section
-
-Logout option
-
-Role-based menu visibility
-
-🎯 Purpose
-
-Provides intuitive navigation and quick access to all modules.

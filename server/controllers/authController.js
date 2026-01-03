@@ -1,23 +1,45 @@
 const User = require('../models/User');
+const EmployeeProfile = require('../models/EmployeeProfile');
 
-// @desc    Register user
+// @desc    Register user (Employee only)
 // @route   POST /api/auth/register
-// @access  Public (or Admin only depending on requirements)
+// @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, firstName, lastName, employeeId } = req.body;
 
-    // Create user
+    // Enforce Employee role and pending status
+    const role = 'Employee';
+    const status = 'pending';
+
+    // 1. Create User
     const user = await User.create({
       email,
       password,
-      role, // Ideally, only Admin should be able to set role 'Admin'
+      role,
+      status
     });
 
-    sendTokenResponse(user, 201, res);
+    // 2. Create Employee Profile immediately
+    // Note: We need minimal fields. Assuming firstName/lastName/employeeId are provided.
+    // If optional, handle gracefully.
+    await EmployeeProfile.create({
+      user: user._id,
+      firstName: firstName || 'New',
+      lastName: lastName || 'User',
+      employeeId: employeeId || `EMP-${Date.now()}`, // Fallback if not provided, though recommended
+      email: email, // redundant but in schema
+      department: 'Unassigned',
+      jobTitle: 'Pending'
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Account created successfully. Your account is pending HR verification.'
+    });
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(400).json({ success: false, error: 'Email already exists' });
+      return res.status(400).json({ success: false, error: 'Email or Employee ID already exists' });
     }
     console.error(err);
     res.status(500).json({ success: false, error: 'Server Error' });
@@ -48,6 +70,16 @@ exports.login = async (req, res, next) => {
 
     if (!isMatch) {
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
+    }
+
+    // Check Status
+    if (user.role !== 'Admin') {
+      if (user.status === 'pending') {
+        return res.status(403).json({ success: false, error: 'Your account is pending HR verification.' });
+      }
+      if (user.status === 'rejected') {
+        return res.status(403).json({ success: false, error: 'Your account has been rejected.' });
+      }
     }
 
     sendTokenResponse(user, 200, res);
@@ -99,7 +131,8 @@ const sendTokenResponse = (user, statusCode, res) => {
       user: {
         id: user._id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        status: user.status
       }
     });
 };

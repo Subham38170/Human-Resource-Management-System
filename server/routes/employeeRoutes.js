@@ -4,6 +4,8 @@ const {
   getEmployee,
   createEmployee,
   updateEmployee,
+  deleteEmployee,
+  verifyUser,
   getMyProfile
 } = require('../controllers/employeeController');
 
@@ -25,6 +27,9 @@ router
 router
   .route('/:id')
   .get(getEmployee)
-  .put(updateEmployee);
+  .put(updateEmployee)
+  .delete(authorize('Admin'), deleteEmployee);
+
+router.put('/:id/verify', authorize('Admin'), verifyUser);
 
 module.exports = router;

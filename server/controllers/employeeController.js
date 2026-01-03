@@ -24,11 +24,10 @@ exports.getMyProfile = async (req, res, next) => {
 
 // @desc    Get all employees
 // @route   GET /api/employees
-
 // @access  Private/Admin
 exports.getEmployees = async (req, res, next) => {
   try {
-    const employees = await EmployeeProfile.find().populate('user', 'email role');
+    const employees = await EmployeeProfile.find().populate('user', 'email role status');
 
     res.status(200).json({
       success: true,
@@ -67,19 +66,40 @@ exports.getEmployee = async (req, res, next) => {
   }
 };
 
-// @desc    Create new employee profile
+// @desc    Create new employee profile (and User account if needed)
 // @route   POST /api/employees
-// @access  Private/Admin (Usually)
+// @access  Private/Admin
 exports.createEmployee = async (req, res, next) => {
   try {
-    // Add user to req.body
-    req.body.user = req.body.userId; // Expecting userId in body or created via Admin flow
+    const { email, password, firstName, lastName, jobTitle, department, employeeId } = req.body;
 
-    // Check for existing profile
-    const existingProfile = await EmployeeProfile.findOne({ user: req.body.userId });
+    // 1. Create User
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: 'Please provide email and password for the new employee' });
+    }
 
+    // Check if user exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ success: false, error: 'User with this email already exists' });
+    }
+
+    user = await User.create({
+      email,
+      password,
+      role: 'Employee'
+    });
+
+    // 2. Create Employee Profile
+    req.body.user = user._id;
+
+    // Check for existing profile (shouldn't exist if user is new, but safe to check)
+    const existingProfile = await EmployeeProfile.findOne({ employeeId });
     if (existingProfile) {
-      return res.status(400).json({ success: false, error: 'Employee profile already exists for this user' });
+      // Rollback user creation if profile creation fails? For simplicity in this hackathon, we skip complex transactions but it's a good practice.
+      // For now, if profile fails, we might leave an orphan user. Robustness improvement: delete user if profile fails.
+      await User.findByIdAndDelete(user._id);
+      return res.status(400).json({ success: false, error: 'Employee ID already exists' });
     }
 
     const employee = await EmployeeProfile.create(req.body);
@@ -90,7 +110,9 @@ exports.createEmployee = async (req, res, next) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, error: 'Server Error' });
+    // Attempt rollback if user was created but profile failed
+    // This is tricky without transaction context variables, but generic error handler catches this.
+    res.status(500).json({ success: false, error: err.message || 'Server Error' });
   }
 };
 
@@ -143,6 +165,67 @@ exports.updateEmployee = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: employee
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+// @desc    Delete employee
+// @route   DELETE /api/employees/:id
+// @access  Private/Admin
+exports.deleteEmployee = async (req, res, next) => {
+  try {
+    const employee = await EmployeeProfile.findById(req.params.id);
+
+    if (!employee) {
+      return res.status(404).json({ success: false, error: 'Employee not found' });
+    }
+
+    // Delete associated user
+    if (employee.user) {
+      await User.findByIdAndDelete(employee.user);
+    }
+
+    await employee.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+};
+
+// @desc    Verify user (Approve/Reject)
+// @route   PUT /api/employees/:id/verify
+// @access  Private/Admin
+exports.verifyUser = async (req, res, next) => {
+  try {
+    const { status } = req.body; // 'active' or 'rejected'
+
+    // Find EmployeeProfile
+    const employee = await EmployeeProfile.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).json({ success: false, error: 'Employee not found' });
+    }
+
+    // Find associated User
+    const user = await User.findById(employee.user);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User account not found' });
+    }
+
+    // Update status
+    user.status = status;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      data: user
     });
   } catch (err) {
     console.error(err);

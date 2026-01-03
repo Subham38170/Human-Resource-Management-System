@@ -1,8 +1,59 @@
+import { useState, useEffect } from 'react';
 import { FaUsers, FaUserClock, FaCalendarMinus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    employees: 0,
+    onTime: 0,
+    pendingLeaves: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+        // Fetch all stats concurrently for better performance
+        const [empRes, attRes, leaveRes] = await Promise.all([
+            api.get('/employees'),
+            api.get('/attendance/all'),
+            api.get('/leaves/all')
+        ]);
+        
+        // Calculate stats from response data
+        const employeeCount = empRes.data.data ? empRes.data.data.length : 0;
+        
+        // Calculate "On Time" (Present today)
+        const todayStr = new Date().toDateString();
+        const onTimeCount = attRes.data.data 
+            ? attRes.data.data.filter(a => new Date(a.date).toDateString() === todayStr && a.status === 'Present').length 
+            : 0;
+        
+        // Calculate Pending Leaves
+        const pendingCount = leaveRes.data.data 
+            ? leaveRes.data.data.filter(l => l.status === 'Pending').length 
+            : 0;
+
+        setStats({
+            employees: employeeCount,
+            onTime: onTimeCount,
+            pendingLeaves: pendingCount
+        });
+    } catch (error) {
+        console.error("Failed to fetch dashboard stats", error);
+    } finally {
+        setLoading(false);
+    }
+  };
+
+  if (loading) {
+      return <div className="p-10 text-center text-gray-500">Loading dashboard...</div>;
+  }
 
   return (
     <div>
@@ -15,7 +66,7 @@ const AdminDashboard = () => {
           </div>
           <div>
             <p className="text-gray-500 text-sm font-medium">Total Employees</p>
-            <p className="text-2xl font-bold text-gray-800">24</p> {/* Placeholder */}
+            <p className="text-2xl font-bold text-gray-800">{stats.employees}</p>
           </div>
         </div>
 
@@ -25,7 +76,7 @@ const AdminDashboard = () => {
           </div>
           <div>
             <p className="text-gray-500 text-sm font-medium">On Time Today</p>
-            <p className="text-2xl font-bold text-gray-800">18</p> {/* Placeholder */}
+            <p className="text-2xl font-bold text-gray-800">{stats.onTime}</p>
           </div>
         </div>
 
@@ -35,7 +86,7 @@ const AdminDashboard = () => {
           </div>
           <div>
             <p className="text-gray-500 text-sm font-medium">Pending Leaves</p>
-            <p className="text-2xl font-bold text-gray-800">3</p> {/* Placeholder */}
+            <p className="text-2xl font-bold text-gray-800">{stats.pendingLeaves}</p>
           </div>
         </div>
       </div>

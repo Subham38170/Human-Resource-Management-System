@@ -49,7 +49,7 @@ function App() {
             {/* Redirect root to login */}
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
-          <ToastContainer position="top-right" autoClose={3000} />
+<ToastContainer position="top-right" autoClose={3000} theme="colored" hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </div>
       </AuthProvider>
     </Router>

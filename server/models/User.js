@@ -23,9 +23,10 @@ const UserSchema = new mongoose.Schema({
     enum: ['Admin', 'Employee'],
     default: 'Employee',
   },
-  isVerified: {
-    type: Boolean,
-    default: true, // Simplified for now; usually false until email verification
+  status: {
+    type: String,
+    enum: ['pending', 'active', 'rejected'],
+    default: 'pending',
   },
   createdAt: {
     type: Date,

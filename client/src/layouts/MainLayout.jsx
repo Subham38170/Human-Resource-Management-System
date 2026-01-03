@@ -29,7 +29,7 @@ const MainLayout = () => {
         const currentItem = navItems.find(item => item.path === location.pathname);
         if (currentItem) return currentItem.label;
         if (location.pathname === '/profile') return 'Profile';
-        return 'Admin Portal';
+        return 'HR Portal';
     };
 
     return (
@@ -71,7 +71,7 @@ const MainLayout = () => {
                         </div>
                         <div className="ml-3 overflow-hidden">
                             <p className="text-sm font-medium text-white truncate" title={user?.email}>{user?.email}</p>
-                            <p className="text-xs text-slate-400 truncate">{user?.role}</p>
+                            <p className="text-xs text-slate-400 truncate">{user?.role === 'Admin' ? 'HR' : user?.role}</p>
                         </div>
                     </div>
                 </div>

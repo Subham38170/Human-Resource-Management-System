@@ -71,12 +71,31 @@ exports.getMyPayroll = async (req, res, next) => {
 // @access  Private/Admin
 exports.getAllPayroll = async (req, res, next) => {
   try {
-    const payrolls = await Payroll.find().populate('user', 'email').sort({ createdAt: -1 });
+    const payrolls = await Payroll.find().sort({ createdAt: -1 });
+    const profiles = await EmployeeProfile.find();
+
+    // Create a map of user ID to employee profile for efficient lookup
+    const profileMap = {};
+    profiles.forEach(p => {
+      profileMap[p.user.toString()] = p;
+    });
+
+    const enrichedPayrolls = payrolls.map(p => {
+      const profile = profileMap[p.user.toString()];
+      return {
+        ...p.toObject(),
+        employee: profile ? {
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          employeeId: profile.employeeId
+        } : null
+      };
+    });
 
     res.status(200).json({
       success: true,
-      count: payrolls.length,
-      data: payrolls
+      count: enrichedPayrolls.length,
+      data: enrichedPayrolls
     });
   } catch (err) {
     console.error(err);

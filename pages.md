@@ -1,6 +1,5 @@
 <img width="1914" height="924" alt="Screenshot 2026-01-03 180623" src="https://github.com/user-attachments/assets/8decefe7-e322-4037-94ed-a1b710dabc3f" />
-1️⃣ Login Page
-📄 Description
+Login Page
 
 The Login page serves as the secure entry point for the Dayflow HRMS platform. Users authenticate using their registered email and password to access role-specific dashboards.
 

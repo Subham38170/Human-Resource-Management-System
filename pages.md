@@ -18,9 +18,7 @@ Link to registration page for new users
 🎯 Purpose
 
 Ensures only authorized users can access the HRMS system.
-<img width="1919" height="924" alt="Screenshot 2026-01-03 180950" src="https://github.com/user-attachments/assets/a60c4e7f-2477-4e6f-9c0e-cac6d21a5e90" />
-2️⃣ Admin Dashboard
-📄 Description
+<img width="1915" height="922" alt="Screenshot 2026-01-03 181002" src="https://github.com/user-attachments/assets/e7ddbae2-b15a-45ae-b821-995275af8ec1" />
 
 The Admin Dashboard provides a high-level overview of organizational metrics and quick access to critical actions.
 
@@ -44,8 +42,8 @@ Success toast notification on login
 
 Gives HR/Admin an instant snapshot of workforce status.
 
-<img width="1915" height="922" alt="Screenshot 2026-01-03 181002" src="https://github.com/user-attachments/assets/e7ddbae2-b15a-45ae-b821-995275af8ec1" />
-📄 Description
+<img width="1910" height="930" alt="Screenshot 2026-01-03 181013" src="https://github.com/user-attachments/assets/adb3d221-d1c4-4855-93e4-6acd3a35d0da" />
+
 
 This page allows HR/Admin to view, manage, and verify all employees in the organization.
 
@@ -72,9 +70,7 @@ Add Employee button
 🎯 Purpose
 
 Centralized employee management and verification.
-<img width="1910" height="930" alt="Screenshot 2026-01-03 181013" src="https://github.com/user-attachments/assets/adb3d221-d1c4-4855-93e4-6acd3a35d0da" />
-4️⃣ Attendance Page (Admin View)
-📄 Description
+<img width="1908" height="919" alt="Screenshot 2026-01-03 181022" src="https://github.com/user-attachments/assets/5a311536-e2dd-4ffc-9f86-fceff7881068" />
 
 The Attendance page allows HR/Admin to monitor daily attendance records of employees.
 
@@ -95,9 +91,8 @@ Check In / Check Out buttons
 🎯 Purpose
 
 Tracks workforce attendance and working hours accurately.
-<img width="1908" height="919" alt="Screenshot 2026-01-03 181022" src="https://github.com/user-attachments/assets/5a311536-e2dd-4ffc-9f86-fceff7881068" />
-5️⃣ Leaves Management Page (Admin)
-📄 Description
+<img width="1906" height="927" alt="Screenshot 2026-01-03 181031" src="https://github.com/user-attachments/assets/158fe9d8-d46c-48b6-9c79-be64fc47c074" />
+Leaves Management Page
 
 This page displays all leave requests submitted by employees for administrative review.
 
@@ -124,9 +119,9 @@ Apply Leave button (if required)
 🎯 Purpose
 
 Allows HR/Admin to review and manage leave requests efficiently.
-<img width="1906" height="927" alt="Screenshot 2026-01-03 181031" src="https://github.com/user-attachments/assets/158fe9d8-d46c-48b6-9c79-be64fc47c074" />
-6️⃣ Attendance Page (Employee View)
-📄 Description
+
+<img width="1910" height="930" alt="Screenshot 2026-01-03 181124" src="https://github.com/user-attachments/assets/0ec3b5ed-7580-404f-9c02-9bbb93092e79" />
+Attendance Page 
 
 Employees can view and manage their own daily attendance records from this page.
 
@@ -145,8 +140,6 @@ Check In / Check Out actions
 🎯 Purpose
 
 Enables employees to mark attendance and track working hours transparently.
-
-<img width="1910" height="930" alt="Screenshot 2026-01-03 181124" src="https://github.com/user-attachments/assets/0ec3b5ed-7580-404f-9c02-9bbb93092e79" />
 7️⃣ My Leaves Page (Employee)
 📄 Description
 
@@ -168,6 +161,7 @@ Apply Leave button
 
 Provides transparency and tracking for employee leave requests.
 <img width="1902" height="944" alt="Screenshot 2026-01-03 181131" src="https://github.com/user-attachments/assets/528227aa-2e04-4deb-8456-a79b3a9af8eb" />
+<img width="1909" height="928" alt="Screenshot 2026-01-03 181150" src="https://github.com/user-attachments/assets/fb93273a-a13c-4152-8876-8a970b174419" />
 8️⃣ Apply Leave Modal
 📄 Description
 
@@ -189,7 +183,6 @@ Validation for required fields
 
 Simplifies the leave application process with a clean UI.
 
-<img width="1909" height="928" alt="Screenshot 2026-01-03 181150" src="https://github.com/user-attachments/assets/fb93273a-a13c-4152-8876-8a970b174419" />
 
 9️⃣ Sidebar Navigation (Common)
 📄 Description
